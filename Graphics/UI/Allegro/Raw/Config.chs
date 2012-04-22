@@ -3,6 +3,7 @@
 module Graphics.UI.Allegro.Raw.Config where
 
 import C2HS
+import Internal
 {#import Graphics.UI.Allegro.Raw.File #}
 
 #include "allegro-raw.h"
@@ -31,6 +32,6 @@ data ConfigEntry'
 {#fun unsafe al_destroy_config as destroyConfig { id `Config' } -> `()' #}
 
 {#fun unsafe al_get_next_config_section as getNextConfigSection { id `ConfigSectionIterator' } -> `String' #}
-{#fun unsafe al_get_first_config_section as getFirstConfigSection { id `Config', alloca- `ConfigSectionIterator' id } -> `String' #}
-{#fun unsafe al_get_first_config_entry as getFirstConfigEntry { id `Config', `String', alloca- `ConfigEntryIterator' id } -> `String' #}
+{#fun unsafe al_get_first_config_section as getFirstConfigSection { id `Config', withMalloc- `ConfigSectionIterator' id } -> `String' #}
+{#fun unsafe al_get_first_config_entry as getFirstConfigEntry { id `Config', `String', withMalloc- `ConfigEntryIterator' id } -> `String' #}
 {#fun unsafe al_get_next_config_entry as getNextConfigEntry { id `ConfigEntryIterator' } -> `String' #}

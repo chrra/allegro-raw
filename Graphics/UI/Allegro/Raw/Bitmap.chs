@@ -149,7 +149,7 @@ instance Enum LockingFlags where
 {#fun unsafe al_convert_mask_to_alpha_w as convertMaskToAlpha { id `Bitmap', withT* `Color' } -> `()' #}
 
 {#fun unsafe al_set_clipping_rectangle as setClippingRectangle { `Int', `Int', `Int', `Int' } -> `()' #}
-{#fun unsafe al_get_clipping_rectangle as getClippingRectangle { alloca- `Int' peek'n'cToInt*, alloca- `Int' peek'n'cToInt*, alloca- `Int' peek'n'cToInt*, alloca- `Int' peek'n'cToInt* } -> `()' #}
+{#fun unsafe al_get_clipping_rectangle as getClippingRectangle { alloca- `Int' peekIntConv*, alloca- `Int' peekIntConv*, alloca- `Int' peekIntConv*, alloca- `Int' peekIntConv* } -> `()' #}
 
 {#fun unsafe al_create_sub_bitmap as createSubBitmap { id `Bitmap', `Int', `Int', `Int', `Int' } -> `Bitmap' id #}
 {#fun unsafe al_is_sub_bitmap as isSubBitmap { id `Bitmap' } -> `Bool' #}
@@ -158,6 +158,6 @@ instance Enum LockingFlags where
 {#fun unsafe al_is_bitmap_locked as isBitmapLocked { id `Bitmap' } -> `Bool' #}
 
 {#fun unsafe al_set_blender as setBlender { cFromEnum `BlendOperations', cFromEnum `BlendMode', cFromEnum `BlendMode' } -> `()' #}
-{#fun unsafe al_get_blender as getBlender { alloca- `BlendOperations' peek'n'cToEnum*, alloca- `BlendMode' peek'n'cToEnum*, alloca- `BlendMode' peek'n'cToEnum* } -> `()' #}
+{#fun unsafe al_get_blender as getBlender { alloca- `BlendOperations' peekEnumConv*, alloca- `BlendMode' peekEnumConv*, alloca- `BlendMode' peekEnumConv* } -> `()' #}
 {#fun unsafe al_set_separate_blender as setSeparateBlender { cFromEnum `BlendOperations', cFromEnum `BlendMode', cFromEnum `BlendMode', cFromEnum `BlendOperations', cFromEnum `BlendMode', cFromEnum `BlendMode' } -> `()' #}
-{#fun unsafe al_get_separate_blender as getSeparateBlender { alloca- `BlendOperations' peek'n'cToEnum*, alloca- `BlendMode' peek'n'cToEnum*, alloca- `BlendMode' peek'n'cToEnum*, alloca- `BlendOperations' peek'n'cToEnum*, alloca- `BlendMode' peek'n'cToEnum*, alloca- `BlendMode' peek'n'cToEnum* } -> `()' #}
+{#fun unsafe al_get_separate_blender as getSeparateBlender { alloca- `BlendOperations' peekEnumConv*, alloca- `BlendMode' peekEnumConv*, alloca- `BlendMode' peekEnumConv*, alloca- `BlendOperations' peekEnumConv*, alloca- `BlendMode' peekEnumConv*, alloca- `BlendMode' peekEnumConv* } -> `()' #}

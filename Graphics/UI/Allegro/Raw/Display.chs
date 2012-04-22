@@ -141,18 +141,18 @@ instance Storable MonitorInfo where
 
 {#fun unsafe al_set_display_icon as setDisplayIcon { id `Display', id `Bitmap' } -> `()' #}
 {#fun unsafe al_get_num_video_adapters as getNumVideoAdapters {  } -> `Int' #}
-{#fun unsafe al_get_monitor_info as getMonitorInfo { `Int', alloca- `MonitorInfoPtr' id } -> `Bool' #}
+{#fun unsafe al_get_monitor_info as getMonitorInfo { `Int', alloca- `MonitorInfo' peek* } -> `Bool' #}
 {#fun unsafe al_get_new_display_adapter as getNewDisplayAdapter {  } -> `Int' #}
 {#fun unsafe al_set_new_display_adapter as setNewDisplayAdapter { `Int' } -> `()' #}
 {#fun unsafe al_set_new_window_position as setNewWindowPosition { `Int', `Int' } -> `()' #}
-{#fun unsafe al_get_new_window_position as getNewWindowPosition { alloca- `Int' peek'n'cToInt*, alloca- `Int' peek'n'cToInt* } -> `()' #}
+{#fun unsafe al_get_new_window_position as getNewWindowPosition { alloca- `Int' peekIntConv*, alloca- `Int' peekIntConv* } -> `()' #}
 {#fun unsafe al_set_window_position as setWindowPosition { id `Display', `Int', `Int' } -> `()' #}
-{#fun unsafe al_get_window_position as getWindowPosition { id `Display', alloca- `Int' peek'n'cToInt*, alloca- `Int' peek'n'cToInt* } -> `()' #}
+{#fun unsafe al_get_window_position as getWindowPosition { id `Display', alloca- `Int' peekIntConv*, alloca- `Int' peekIntConv* } -> `()' #}
 
 {#fun unsafe al_set_window_title as setWindowTitle { id `Display', `String' } -> `()' #}
 
 {#fun unsafe al_set_new_display_option as setNewDisplayOption { cFromEnum `DisplayOptions', `Int', `Int' } -> `()' #}
-{#fun unsafe al_get_new_display_option as getNewDisplayOptions { cFromEnum `DisplayOptions', alloca- `Int' peek'n'cToInt* } -> `Int' #}
+{#fun unsafe al_get_new_display_option as getNewDisplayOptions { cFromEnum `DisplayOptions', alloca- `Int' peekIntConv* } -> `Int' #}
 {#fun unsafe al_reset_new_display_options as resetNewDisplayOptions { } -> `()' #}
 
 {#fun unsafe al_get_display_option as getDisplayOption { id `Display', cFromEnum `DisplayOptions' } -> `Int' #}

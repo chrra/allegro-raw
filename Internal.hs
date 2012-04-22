@@ -1,6 +1,7 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 module Internal where
 
+import Control.Applicative
 import Control.Monad.Instances ()
 import Data.Bits
 import Data.List
@@ -26,16 +27,16 @@ peek'n'free p = do x <- peek p
                    free p
                    return x
 
-peek'n'cToInt :: (Storable a, Integral a, Num b) => Ptr a -> IO b
-peek'n'cToInt = fmap fmap fmap fromIntegral peek
-
-peek'n'cToEnum :: (Storable a, Integral a, Enum e) => Ptr a -> IO e
-peek'n'cToEnum = fmap fmap fmap cToEnum peek
+peekEnumConv :: (Storable a, Integral a, Enum e) => Ptr a -> IO e
+peekEnumConv = fmap fmap fmap cToEnum peek
 
 maybePeek' :: Storable a => Ptr a -> IO (Maybe a)
 maybePeek' = maybePeek peek
 
 ptrAndBoolToMaybe :: Storable a => IO (Bool, Ptr a) -> IO (Maybe a)
 ptrAndBoolToMaybe f = do (b, p) <- f
-                         if b then Just `fmap` peek p
-                              else return Nothing
+                         if b then Just `fmap` peek p <* free p
+                              else Nothing <$ free p
+
+withMalloc :: Storable a => (Ptr a -> IO b) -> IO b
+withMalloc = (>>=) malloc

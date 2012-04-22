@@ -3,6 +3,7 @@
 module Graphics.UI.Allegro.Raw.Altime where
 
 import C2HS
+import Internal
 
 #include "allegro-raw.h"
 {#context prefix = "ALLEGRO_" #}
@@ -16,6 +17,6 @@ instance Storable Timeout' where
     peek _ = error "Timeout'.peek: unsupported operation"
     poke _ _ = error "Timeout'.poke: unsupported operation"
 
-{#fun unsafe al_get_time as getTime { } -> `()' #}
+{#fun unsafe al_get_time as getTime { } -> `Double' #}
 {#fun unsafe al_rest as rest { `Double' } -> `()' #}
-{#fun unsafe al_init_timeout as initTimeout { alloca- `Timeout' id, `Double' } -> `()' #}
+{#fun unsafe al_init_timeout as initTimeout { withMalloc- `Timeout' id, `Double' } -> `()' #}

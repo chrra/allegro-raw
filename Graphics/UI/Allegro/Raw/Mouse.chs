@@ -20,7 +20,7 @@ import Internal
 {#fun unsafe al_set_mouse_z as setMouseZ { `Int' } -> `Bool' #}
 {#fun unsafe al_set_mouse_w as setMouseW { `Int' } -> `Bool' #}
 {#fun unsafe al_set_mouse_axis as setMouseAxis { `Int', `Int' } -> `Bool' #}
-{#fun unsafe al_get_mouse_state as getMouseState { alloca- `MouseStatePtr' id } -> `()' #}
+{#fun unsafe al_get_mouse_state as getMouseState { alloca- `MouseState' peek* } -> `()' #}
 {#fun unsafe al_mouse_button_down as mouseButton { id `MouseStatePtr', `Int' } -> `Bool' #}
 {#fun unsafe al_get_mouse_state_axis as getMouseStateAxis { id `MouseStatePtr', `Int' } -> `Int' #}
 
@@ -32,6 +32,6 @@ import Internal
 {#fun unsafe al_set_system_mouse_cursor as setSystemMouseCursor { id `Display', cFromEnum `SystemMouseCursor' } -> `Bool' #}
 {#fun unsafe al_show_mouse_cursor as showMouseCursor { id `Display' } -> `Bool' #}
 {#fun unsafe al_hide_mouse_cursor as hideMouseCursor { id `Display' } -> `Bool' #}
-{#fun unsafe al_get_mouse_cursor_position as getMouseCursorPosition { alloca- `Int' peek'n'cToInt*, alloca- `Int' peek'n'cToInt* } -> `Bool' #}
+{#fun unsafe al_get_mouse_cursor_position as getMouseCursorPosition { alloca- `Int' peekIntConv*, alloca- `Int' peekIntConv* } -> `Bool' #}
 {#fun unsafe al_grab_mouse as grabMouse { id `Display' } -> `Bool' #}
 {#fun unsafe al_ungrab_mouse as ungrabMouse { } -> `()' #}
