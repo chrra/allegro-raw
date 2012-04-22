@@ -22,11 +22,15 @@ extra-source-files:  include/*.h
 
 library
   exposed-modules:   Graphics.UI.Allegro.Raw.Altime
+                   , Graphics.UI.Allegro.Raw.Error
+                   , Graphics.UI.Allegro.Raw.Fmaths
                    , Graphics.UI.Allegro.Raw.Color
                    , Graphics.UI.Allegro.Raw.Keycodes
                    , Graphics.UI.Allegro.Raw.TimerData
+                   , Graphics.UI.Allegro.Raw.Path
                    , Graphics.UI.Allegro.Raw.File
                    , Graphics.UI.Allegro.Raw.Bitmap
+                   , Graphics.UI.Allegro.Raw.BitmapIO
                    , Graphics.UI.Allegro.Raw.Config
                    , Graphics.UI.Allegro.Raw.DisplayData
                    , Graphics.UI.Allegro.Raw.JoystickData
@@ -37,7 +41,6 @@ library
                    , Graphics.UI.Allegro.Raw.Joystick
                    , Graphics.UI.Allegro.Raw.Keyboard
                    , Graphics.UI.Allegro.Raw.Mouse
-                   , Graphics.UI.Allegro.Raw.Path
                    , Graphics.UI.Allegro.Raw.System
                    , Graphics.UI.Allegro.Raw.Timer
                    , Graphics.UI.Allegro.Raw
@@ -47,4 +50,4 @@ library
   build-depends:     base ==4.5.*
   build-tools:       c2hs
   extra-libraries:   allegro
-  ghc-options:       -Wall
+  ghc-options:       -Wall -fno-warn-unused-matches
