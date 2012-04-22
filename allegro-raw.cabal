@@ -1,0 +1,50 @@
+name:                allegro-raw
+version:             0.1.0.0
+synopsis:            Raw bindings to Allegro.
+homepage:            http://github.com/chrra/allegro-raw
+license:             BSD3
+license-file:        LICENSE
+author:              Christian Rødli Amble
+maintainer:          cra+code@cra.no
+category:            Foreign binding
+build-type:          Simple
+cabal-version:       >=1.8
+
+extra-source-files:  include/*.h
+                   , include/*.sh
+                   , include/allegro5/*.h
+                   , include/allegro5/opengl/*.h
+                   , include/allegro5/opengl/GLext/*.h
+                   , include/allegro5/inline/*.h
+                   , include/allegro5/internal/*.h
+                   , include/allegro5/platform/*.h
+                   , cbits/allegro-raw.c
+
+library
+  exposed-modules:   Graphics.UI.Allegro.Raw.Altime
+                   , Graphics.UI.Allegro.Raw.Color
+                   , Graphics.UI.Allegro.Raw.Keycodes
+                   , Graphics.UI.Allegro.Raw.TimerData
+                   , Graphics.UI.Allegro.Raw.File
+                   , Graphics.UI.Allegro.Raw.Bitmap
+                   , Graphics.UI.Allegro.Raw.Config
+                   , Graphics.UI.Allegro.Raw.DisplayData
+                   , Graphics.UI.Allegro.Raw.JoystickData
+                   , Graphics.UI.Allegro.Raw.KeyboardData
+                   , Graphics.UI.Allegro.Raw.MouseData
+                   , Graphics.UI.Allegro.Raw.Events
+                   , Graphics.UI.Allegro.Raw.Display
+                   , Graphics.UI.Allegro.Raw.Joystick
+                   , Graphics.UI.Allegro.Raw.Keyboard
+                   , Graphics.UI.Allegro.Raw.Mouse
+                   , Graphics.UI.Allegro.Raw.Path
+                   , Graphics.UI.Allegro.Raw.System
+                   , Graphics.UI.Allegro.Raw.Timer
+                   , Graphics.UI.Allegro.Raw
+  c-sources:         cbits/allegro-raw.c
+  include-dirs:      include
+  other-modules:     C2HS, Internal
+  build-depends:     base ==4.5.*
+  build-tools:       c2hs
+  extra-libraries:   allegro
+  ghc-options:       -Wall
