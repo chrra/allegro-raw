@@ -24,6 +24,7 @@ library
   exposed-modules:   Graphics.UI.Allegro.Raw.Altime
                    , Graphics.UI.Allegro.Raw.Error
                    , Graphics.UI.Allegro.Raw.Fmaths
+                   , Graphics.UI.Allegro.Raw.Transformations
                    , Graphics.UI.Allegro.Raw.Color
                    , Graphics.UI.Allegro.Raw.Keycodes
                    , Graphics.UI.Allegro.Raw.TimerData
