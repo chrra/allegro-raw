@@ -40,3 +40,8 @@ ptrAndBoolToMaybe f = do (b, p) <- f
 
 withMalloc :: Storable a => (Ptr a -> IO b) -> IO b
 withMalloc = (>>=) malloc
+
+withMallocedForeign :: Storable a => (Ptr a -> IO b) -> IO (ForeignPtr a)
+withMallocedForeign f = do x <- mallocForeignPtr
+                           _ <- withForeignPtr x f
+                           return x
