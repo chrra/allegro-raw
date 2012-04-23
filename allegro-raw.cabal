@@ -22,6 +22,7 @@ extra-source-files:  include/*.h
 
 library
   exposed-modules:   Graphics.UI.Allegro.Raw.Altime
+                   , Graphics.UI.Allegro.Raw.Thread
                    , Graphics.UI.Allegro.Raw.Error
                    , Graphics.UI.Allegro.Raw.Tls
                    , Graphics.UI.Allegro.Raw.Fmaths
