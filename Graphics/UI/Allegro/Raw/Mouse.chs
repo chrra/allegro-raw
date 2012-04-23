@@ -26,7 +26,7 @@ import Internal
 
 {#fun unsafe al_get_mouse_event_source as getMouseEventSource { } -> `EventSource' id #}
 
-{#fun unsafe al_create_mouse_cursor as createMouseCursor { id `Bitmap', `Int', `Int' } -> `MouseCursor' id #}
+{#fun unsafe al_create_mouse_cursor as createMouseCursor { withForeignPtr* `Bitmap', `Int', `Int' } -> `MouseCursor' id #}
 {#fun unsafe al_destroy_mouse_cursor as destroyMouseCursor { id `MouseCursor' } -> `()' #}
 {#fun unsafe al_set_mouse_cursor as setMouseCursor { id `Display', id `MouseCursor' } -> `Bool' #}
 {#fun unsafe al_set_system_mouse_cursor as setSystemMouseCursor { id `Display', cFromEnum `SystemMouseCursor' } -> `Bool' #}

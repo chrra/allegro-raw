@@ -120,16 +120,16 @@ instance Storable MonitorInfo where
 {#fun unsafe al_create_display as createDisplay { `Int', `Int' } -> `Display' id #}
 {#fun unsafe al_destroy_display as destroyDisplay { id `Display' } -> `()' #}
 {#fun unsafe al_get_current_display as getCurrentDisplay {  } -> `Display' id #}
-{#fun unsafe al_set_target_bitmap as setTargetBitmap { id `Bitmap' } -> `()' #}
+{#fun unsafe al_set_target_bitmap as setTargetBitmap { withForeignPtr* `Bitmap' } -> `()' #}
 {#fun unsafe al_set_target_backbuffer as setTargetBackbuffer { id `Display' } -> `()' #}
-{#fun unsafe al_get_backbuffer as getBackbuffer { id `Display' } -> `Bitmap' id #}
-{#fun unsafe al_get_target_bitmap as getTargetBitmap { } -> `Bitmap' id #}
+{#fun unsafe al_get_backbuffer as getBackbuffer { id `Display' } -> `Bitmap' newBitmap'* #}
+{#fun unsafe al_get_target_bitmap as getTargetBitmap { } -> `Bitmap' newBitmap'* #}
 
 {#fun unsafe al_acknowledge_resize as acknowledgeResize { id `Display' } -> `Bool' #}
 {#fun unsafe al_resize_display as resizeDisplay { id `Display', `Int', `Int' } -> `Bool' #}
 {#fun unsafe al_flip_display as flipDisplay { } -> `()' #}
 {#fun unsafe al_update_display_region as updateDisplayRegion { `Int', `Int', `Int', `Int' } -> `()' #}
-{#fun unsafe al_is_compatible_bitmap as isCompatibleBitmap { id `Bitmap' } -> `Bool' #}
+{#fun unsafe al_is_compatible_bitmap as isCompatibleBitmap { withForeignPtr* `Bitmap' } -> `Bool' #}
 
 {#fun unsafe al_get_num_display_modes as getNumDisplayModes { } -> `Int' #}
 {#fun unsafe al_get_display_mode as getDisplayMode { `Int', withT* `DisplayMode' } -> `DisplayMode' peek* #}
@@ -139,10 +139,10 @@ instance Storable MonitorInfo where
 {#fun unsafe al_clear_to_color_w as clearToColor { withT* `Color' } -> `()' #}
 {#fun unsafe al_draw_pixel_w as drawPixel { `Float', `Float', withT* `Color' } -> `()' #}
 
-{#fun unsafe al_set_display_icon as setDisplayIcon { id `Display', id `Bitmap' } -> `()' #}
+{#fun unsafe al_set_display_icon as setDisplayIcon { id `Display', withForeignPtr* `Bitmap' } -> `()' #}
 {#fun unsafe al_get_num_video_adapters as getNumVideoAdapters {  } -> `Int' #}
 {#fun unsafe al_get_monitor_info as getMonitorInfo { `Int', alloca- `MonitorInfo' peek* } -> `Bool' #}
-{#fun unsafe al_get_new_display_adapter as getNewDisplayAdapter {  } -> `Int' #}
+{#fun unsafe al_get_new_display_adapter as getNewDisplayAdapter { } -> `Int' #}
 {#fun unsafe al_set_new_display_adapter as setNewDisplayAdapter { `Int' } -> `()' #}
 {#fun unsafe al_set_new_window_position as setNewWindowPosition { `Int', `Int' } -> `()' #}
 {#fun unsafe al_get_new_window_position as getNewWindowPosition { alloca- `Int' peekIntConv*, alloca- `Int' peekIntConv* } -> `()' #}

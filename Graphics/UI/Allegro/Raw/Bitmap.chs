@@ -9,8 +9,19 @@ import Internal
 #include "allegro-raw.h"
 {#context prefix = "ALLEGRO_" #}
 
-data Bitmap'
-{#pointer *BITMAP as Bitmap -> Bitmap' #}
+data Bitmap_
+{#pointer *BITMAP as Bitmap foreign -> Bitmap_ #}
+
+newBitmap :: Ptr Bitmap_ -> IO Bitmap
+newBitmap x = newForeignPtr destroyBitmapPtr x
+
+-- | newBitmap without a finalizer.
+newBitmap' :: Ptr Bitmap_ -> IO Bitmap
+newBitmap' = newForeignPtr_
+
+foreign import ccall "allegro-raw.h &al_destroy_bitmap"
+    destroyBitmapPtr :: FinalizerPtr Bitmap_
+
 
 {#enum PIXEL_FORMAT as PixelFormat {underscoreToCase} deriving (Show, Eq, Ord, Read) #}
 
@@ -121,41 +132,46 @@ instance Enum LockingFlags where
 {#fun unsafe al_get_new_bitmap_flags as getNewBitmapFlags { } -> `[BitmapFlags]' cToEnumFlags #}
 {#fun unsafe al_add_new_bitmap_flag as addNewBitmapFlag { cFromEnumFlags `[BitmapFlags]' } -> `()' #}
 
-{#fun unsafe al_get_bitmap_width as getBitmapWidth { id `Bitmap' } -> `Int' #}
-{#fun unsafe al_get_bitmap_height as getBitmapHeight { id `Bitmap' } -> `Int' #}
-{#fun unsafe al_get_bitmap_format as getBitmapFormat { id `Bitmap' } -> `PixelFormat' cToEnum #}
-{#fun unsafe al_get_bitmap_flags as getBitmapFlags { id `Bitmap' } -> `[BitmapFlags]' cToEnumFlags #}
-{#fun unsafe al_create_bitmap as  createBitmap { `Int', `Int' } -> `Bitmap' id #}
-{#fun unsafe al_destroy_bitmap as destroyBitmap { id `Bitmap' } -> `()' #}
+{#fun unsafe al_get_bitmap_width as getBitmapWidth { withForeignPtr* `Bitmap' } -> `Int' #}
+{#fun unsafe al_get_bitmap_height as getBitmapHeight { withForeignPtr* `Bitmap' } -> `Int' #}
+{#fun unsafe al_get_bitmap_format as getBitmapFormat { withForeignPtr* `Bitmap' } -> `PixelFormat' cToEnum #}
+{#fun unsafe al_get_bitmap_flags as getBitmapFlags { withForeignPtr* `Bitmap' } -> `[BitmapFlags]' cToEnumFlags #}
+{#fun unsafe al_create_bitmap as  createBitmap { `Int', `Int' } -> `Bitmap' newBitmap* #}
+{#fun unsafe al_destroy_bitmap as destroyBitmap' { id `Ptr Bitmap_' } -> `()' #}
+destroyBitmap :: Bitmap -> IO ()
+destroyBitmap = finalizeForeignPtr
 
-{#fun unsafe al_draw_bitmap as drawBitmap { id `Bitmap', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
-{#fun unsafe al_draw_bitmap_region as drawBitmapRegion { id `Bitmap', `Float', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]'} -> `()' #}
-{#fun unsafe al_draw_scaled_bitmap as drawScaledBitmap { id `Bitmap', `Float', `Float', `Float', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
-{#fun unsafe al_draw_rotated_bitmap as drawRotatedBitmap { id `Bitmap', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
-{#fun unsafe al_draw_scaled_rotated_bitmap as drawScaledRotatedBitmp { id `Bitmap', `Float', `Float', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
+{#fun unsafe al_draw_bitmap as drawBitmap { withForeignPtr* `Bitmap', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
+{#fun unsafe al_draw_bitmap_region as drawBitmapRegion { withForeignPtr* `Bitmap', `Float', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]'} -> `()' #}
+{#fun unsafe al_draw_scaled_bitmap as drawScaledBitmap { withForeignPtr* `Bitmap', `Float', `Float', `Float', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
+{#fun unsafe al_draw_rotated_bitmap as drawRotatedBitmap { withForeignPtr* `Bitmap', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
+{#fun unsafe al_draw_scaled_rotated_bitmap as drawScaledRotatedBitmp { withForeignPtr* `Bitmap', `Float', `Float', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
 
-{#fun unsafe al_draw_tinted_bitmap_w as drawTintedBitmap { id `Bitmap', withT* `Color', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
-{#fun unsafe al_draw_tinted_bitmap_region_w as drawTintedBitmapRegion { id `Bitmap', withT* `Color', `Float', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
-{#fun unsafe al_draw_tinted_scaled_bitmap_w as drawTintedScaledBitmapRegion { id `Bitmap', withT* `Color', `Float', `Float', `Float', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
-{#fun unsafe al_draw_tinted_rotated_bitmap_w as drawTintedRotatedBitmap { id `Bitmap', withT* `Color', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
-{#fun unsafe al_draw_tinted_scaled_rotated_bitmap_w as drawTintedScaledRotatedBitmap { id `Bitmap', withT* `Color', `Float', `Float', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
+{#fun unsafe al_draw_tinted_bitmap_w as drawTintedBitmap { withForeignPtr* `Bitmap', withT* `Color', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
+{#fun unsafe al_draw_tinted_bitmap_region_w as drawTintedBitmapRegion { withForeignPtr* `Bitmap', withT* `Color', `Float', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
+{#fun unsafe al_draw_tinted_scaled_bitmap_w as drawTintedScaledBitmapRegion { withForeignPtr* `Bitmap', withT* `Color', `Float', `Float', `Float', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
+{#fun unsafe al_draw_tinted_rotated_bitmap_w as drawTintedRotatedBitmap { withForeignPtr* `Bitmap', withT* `Color', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
+{#fun unsafe al_draw_tinted_scaled_rotated_bitmap_w as drawTintedScaledRotatedBitmap { withForeignPtr* `Bitmap', withT* `Color', `Float', `Float', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
 
 {#fun unsafe al_put_pixel_w as putPixel { `Int', `Int', withT* `Color' } -> `()' #}
 {#fun unsafe al_put_blended_pixel_w as putBlendedPixel { `Int', `Int', withT* `Color' } -> `()' #}
-{#fun unsafe al_get_pixel_w as getPixel { id `Bitmap', `Int', `Int' } -> `Color' peek'n'free* #}
+{#fun unsafe al_get_pixel_w as getPixel { withForeignPtr* `Bitmap', `Int', `Int' } -> `Color' peek'n'free* #}
 
 -- Elegantly skipping colour mapping and unmapping.
 
-{#fun unsafe al_convert_mask_to_alpha_w as convertMaskToAlpha { id `Bitmap', withT* `Color' } -> `()' #}
+{#fun unsafe al_convert_mask_to_alpha_w as convertMaskToAlpha { withForeignPtr* `Bitmap', withT* `Color' } -> `()' #}
 
 {#fun unsafe al_set_clipping_rectangle as setClippingRectangle { `Int', `Int', `Int', `Int' } -> `()' #}
 {#fun unsafe al_get_clipping_rectangle as getClippingRectangle { alloca- `Int' peekIntConv*, alloca- `Int' peekIntConv*, alloca- `Int' peekIntConv*, alloca- `Int' peekIntConv* } -> `()' #}
 
-{#fun unsafe al_create_sub_bitmap as createSubBitmap { id `Bitmap', `Int', `Int', `Int', `Int' } -> `Bitmap' id #}
-{#fun unsafe al_is_sub_bitmap as isSubBitmap { id `Bitmap' } -> `Bool' #}
+-- "Note that destroying parents of sub-bitmaps will not destroy the
+-- sub-bitmaps; instead the sub-bitmaps become invalid and should no longer
+-- be used." -- Can this be reflected in some way?
+{#fun unsafe al_create_sub_bitmap as createSubBitmap { withForeignPtr* `Bitmap', `Int', `Int', `Int', `Int' } -> `Bitmap' newBitmap* #}
+{#fun unsafe al_is_sub_bitmap as isSubBitmap { withForeignPtr* `Bitmap' } -> `Bool' #}
 
-{#fun unsafe al_clone_bitmap as cloneBitmap { id `Bitmap' } -> `Bitmap' id #}
-{#fun unsafe al_is_bitmap_locked as isBitmapLocked { id `Bitmap' } -> `Bool' #}
+{#fun unsafe al_clone_bitmap as cloneBitmap { withForeignPtr* `Bitmap' } -> `Bitmap' newBitmap* #}
+{#fun unsafe al_is_bitmap_locked as isBitmapLocked { withForeignPtr* `Bitmap' } -> `Bool' #}
 
 {#fun unsafe al_set_blender as setBlender { cFromEnum `BlendOperations', cFromEnum `BlendMode', cFromEnum `BlendMode' } -> `()' #}
 {#fun unsafe al_get_blender as getBlender { alloca- `BlendOperations' peekEnumConv*, alloca- `BlendMode' peekEnumConv*, alloca- `BlendMode' peekEnumConv* } -> `()' #}
