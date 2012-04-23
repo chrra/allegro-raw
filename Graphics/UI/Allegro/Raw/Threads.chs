@@ -3,7 +3,7 @@
 
 -- | Using anything here is probably a horrible idea.
 -- Included for a sense of completeness and peace of mind for the author.
-module Graphics.UI.Allegro.Raw.Thread where
+module Graphics.UI.Allegro.Raw.Threads where
 
 import C2HS
 import Internal
