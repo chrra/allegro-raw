@@ -118,15 +118,15 @@ ALLEGRO_PRIM_FUNC(void, al_destroy_vertex_decl, (ALLEGRO_VERTEX_DECL* decl));
 /*
 * Custom primitives
 */
-ALLEGRO_PRIM_FUNC(void, al_draw_soft_triangle, (ALLEGRO_VERTEX* v1, ALLEGRO_VERTEX* v2, ALLEGRO_VERTEX* v3, uintptr_t state,
-                                           void (*init)(uintptr_t, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*),
-                                           void (*first)(uintptr_t, int, int, int, int),
-                                           void (*step)(uintptr_t, int), 
-                                           void (*draw)(uintptr_t, int, int, int)));
-ALLEGRO_PRIM_FUNC(void, al_draw_soft_line, (ALLEGRO_VERTEX* v1, ALLEGRO_VERTEX* v2, uintptr_t state,
-                                       void (*first)(uintptr_t, int, int, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*),
-                                       void (*step)(uintptr_t, int), 
-                                       void (*draw)(uintptr_t, int, int)));
+ALLEGRO_PRIM_FUNC(void, al_draw_soft_triangle, (ALLEGRO_VERTEX* v1, ALLEGRO_VERTEX* v2, ALLEGRO_VERTEX* v3, void * state,
+                                           void (*init)(void *, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*),
+                                           void (*first)(void *, int, int, int, int),
+                                           void (*step)(void *, int), 
+                                           void (*draw)(void *, int, int, int)));
+ALLEGRO_PRIM_FUNC(void, al_draw_soft_line, (ALLEGRO_VERTEX* v1, ALLEGRO_VERTEX* v2, void * state,
+                                       void (*first)(void *, int, int, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*),
+                                       void (*step)(void *, int), 
+                                       void (*draw)(void *, int, int)));
 
 /*
 *High level primitives

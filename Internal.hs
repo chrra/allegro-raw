@@ -45,3 +45,7 @@ withMallocedForeign :: Storable a => (Ptr a -> IO b) -> IO (ForeignPtr a)
 withMallocedForeign f = do x <- mallocForeignPtr
                            _ <- withForeignPtr x f
                            return x
+
+maybeNewForeignPtr_ :: Storable a => Ptr a -> IO (Maybe (ForeignPtr a))
+maybeNewForeignPtr_ p = if p == nullPtr then return Nothing
+                                        else Just <$> newForeignPtr_ p

@@ -24,6 +24,8 @@ library
   exposed-modules:   Graphics.UI.Allegro.Raw.Altime
                    , Graphics.UI.Allegro.Raw.Threads
                    , Graphics.UI.Allegro.Raw.Error
+                   , Graphics.UI.Allegro.Raw.Utf8
+                   , Graphics.UI.Allegro.Raw.Memory
                    , Graphics.UI.Allegro.Raw.Tls
                    , Graphics.UI.Allegro.Raw.Fmaths
                    , Graphics.UI.Allegro.Raw.Transformations
@@ -46,11 +48,24 @@ library
                    , Graphics.UI.Allegro.Raw.Mouse
                    , Graphics.UI.Allegro.Raw.System
                    , Graphics.UI.Allegro.Raw.Timer
+                   , Graphics.UI.Allegro.Raw.Addon.Audio
+                   , Graphics.UI.Allegro.Raw.Addon.Acodec
+                   , Graphics.UI.Allegro.Raw.Addon.Color
+                   , Graphics.UI.Allegro.Raw.Addon.Font
+                   , Graphics.UI.Allegro.Raw.Addon.Image
+                   , Graphics.UI.Allegro.Raw.Addon.Memfile
+                   , Graphics.UI.Allegro.Raw.Addon.NativeDialog
+                   , Graphics.UI.Allegro.Raw.Addon.Physfs
+                   , Graphics.UI.Allegro.Raw.Addon.Primitives
+                   , Graphics.UI.Allegro.Raw.Addon.Ttf
                    , Graphics.UI.Allegro.Raw
   c-sources:         cbits/allegro-raw.c
   include-dirs:      include
   other-modules:     C2HS, Internal
   build-depends:     base ==4.5.*
   build-tools:       c2hs
-  extra-libraries:   allegro
+  extra-libraries:   allegro allegro_audio allegro_acodec allegro_color
+                     allegro_font allegro_image allegro_memfile
+                     allegro_dialog allegro_physfs allegro_primitives
+                     allegro_ttf
   ghc-options:       -Wall -fno-warn-unused-matches

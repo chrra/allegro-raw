@@ -122,8 +122,8 @@ instance Storable MonitorInfo where
 {#fun unsafe al_get_current_display as getCurrentDisplay {  } -> `Display' id #}
 {#fun unsafe al_set_target_bitmap as setTargetBitmap { withForeignPtr* `Bitmap' } -> `()' #}
 {#fun unsafe al_set_target_backbuffer as setTargetBackbuffer { id `Display' } -> `()' #}
-{#fun unsafe al_get_backbuffer as getBackbuffer { id `Display' } -> `Bitmap' newBitmap'* #}
-{#fun unsafe al_get_target_bitmap as getTargetBitmap { } -> `Bitmap' newBitmap'* #}
+{#fun unsafe al_get_backbuffer as getBackbuffer { id `Display' } -> `Bitmap' bitmapPtrToBitmap'* #}
+{#fun unsafe al_get_target_bitmap as getTargetBitmap { } -> `Bitmap' bitmapPtrToBitmap'* #}
 
 {#fun unsafe al_acknowledge_resize as acknowledgeResize { id `Display' } -> `Bool' #}
 {#fun unsafe al_resize_display as resizeDisplay { id `Display', `Int', `Int' } -> `Bool' #}

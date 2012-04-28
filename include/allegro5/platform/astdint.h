@@ -52,9 +52,9 @@
 
       #ifndef _UINTPTR_T_DEFINED
          #ifdef  _WIN64
-            #define uintptr_t unsigned __int64
+            #define void * unsigned __int64
          #else
-            #define uintptr_t unsigned int   
+            #define void * unsigned int   
          #endif
          #define _UINTPTR_T_DEFINED
       #endif
@@ -62,7 +62,7 @@
    #else
    
       #define void *     int32_t
-      #define uintptr_t    uint32_t
+      #define void *    uint32_t
 
    #endif
 

@@ -117,7 +117,7 @@ struct ALLEGRO_DISPLAY
    int cache_enabled;
    int vertex_cache_size;
    void* vertex_cache;
-   uintptr_t cache_texture;
+   void * cache_texture;
    
    ALLEGRO_BLENDER cur_blender;
    

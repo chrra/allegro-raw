@@ -12,16 +12,15 @@ import Internal
 data Bitmap_
 {#pointer *BITMAP as Bitmap foreign -> Bitmap_ #}
 
-newBitmap :: Ptr Bitmap_ -> IO Bitmap
-newBitmap x = newForeignPtr destroyBitmapPtr x
+bitmapPtrToBitmap :: Ptr Bitmap_ -> IO Bitmap
+bitmapPtrToBitmap = newForeignPtr destroyBitmapPtr
 
--- | newBitmap without a finalizer.
-newBitmap' :: Ptr Bitmap_ -> IO Bitmap
-newBitmap' = newForeignPtr_
+-- | bitmapPtrToBitmap without a finalizer.
+bitmapPtrToBitmap' :: Ptr Bitmap_ -> IO Bitmap
+bitmapPtrToBitmap' = newForeignPtr_
 
 foreign import ccall "allegro-raw.h &al_destroy_bitmap"
     destroyBitmapPtr :: FinalizerPtr Bitmap_
-
 
 {#enum PIXEL_FORMAT as PixelFormat {underscoreToCase} deriving (Show, Eq, Ord, Read) #}
 
@@ -37,11 +36,7 @@ data BitmapFlags
     | Mipmap
     | NoPremultipliedAlpha
     | VideoBitmap
-      deriving (Show, Eq, Ord, Read)
-
-instance Bounded BitmapFlags where
-    minBound = MemoryBitmap
-    maxBound = VideoBitmap
+      deriving (Show, Eq, Ord, Bounded, Read)
 
 instance Enum BitmapFlags where
     toEnum 1     = MemoryBitmap
@@ -136,7 +131,7 @@ instance Enum LockingFlags where
 {#fun unsafe al_get_bitmap_height as getBitmapHeight { withForeignPtr* `Bitmap' } -> `Int' #}
 {#fun unsafe al_get_bitmap_format as getBitmapFormat { withForeignPtr* `Bitmap' } -> `PixelFormat' cToEnum #}
 {#fun unsafe al_get_bitmap_flags as getBitmapFlags { withForeignPtr* `Bitmap' } -> `[BitmapFlags]' cToEnumFlags #}
-{#fun unsafe al_create_bitmap as  createBitmap { `Int', `Int' } -> `Bitmap' newBitmap* #}
+{#fun unsafe al_create_bitmap as  createBitmap { `Int', `Int' } -> `Bitmap' bitmapPtrToBitmap* #}
 {#fun unsafe al_destroy_bitmap as destroyBitmap' { id `Ptr Bitmap_' } -> `()' #}
 destroyBitmap :: Bitmap -> IO ()
 destroyBitmap = finalizeForeignPtr
@@ -155,7 +150,7 @@ destroyBitmap = finalizeForeignPtr
 
 {#fun unsafe al_put_pixel_w as putPixel { `Int', `Int', withT* `Color' } -> `()' #}
 {#fun unsafe al_put_blended_pixel_w as putBlendedPixel { `Int', `Int', withT* `Color' } -> `()' #}
-{#fun unsafe al_get_pixel_w as getPixel { withForeignPtr* `Bitmap', `Int', `Int' } -> `Color' peek'n'free* #}
+{#fun unsafe al_get_pixel_w as getPixel { withForeignPtr* `Bitmap', `Int', `Int', alloca- `Color' peek* } -> `()' #}
 
 -- Elegantly skipping colour mapping and unmapping.
 
@@ -167,10 +162,10 @@ destroyBitmap = finalizeForeignPtr
 -- "Note that destroying parents of sub-bitmaps will not destroy the
 -- sub-bitmaps; instead the sub-bitmaps become invalid and should no longer
 -- be used." -- Can this be reflected in some way?
-{#fun unsafe al_create_sub_bitmap as createSubBitmap { withForeignPtr* `Bitmap', `Int', `Int', `Int', `Int' } -> `Bitmap' newBitmap* #}
+{#fun unsafe al_create_sub_bitmap as createSubBitmap { withForeignPtr* `Bitmap', `Int', `Int', `Int', `Int' } -> `Bitmap' bitmapPtrToBitmap* #}
 {#fun unsafe al_is_sub_bitmap as isSubBitmap { withForeignPtr* `Bitmap' } -> `Bool' #}
 
-{#fun unsafe al_clone_bitmap as cloneBitmap { withForeignPtr* `Bitmap' } -> `Bitmap' newBitmap* #}
+{#fun unsafe al_clone_bitmap as cloneBitmap { withForeignPtr* `Bitmap' } -> `Bitmap' bitmapPtrToBitmap* #}
 {#fun unsafe al_is_bitmap_locked as isBitmapLocked { withForeignPtr* `Bitmap' } -> `Bool' #}
 
 {#fun unsafe al_set_blender as setBlender { cFromEnum `BlendOperations', cFromEnum `BlendMode', cFromEnum `BlendMode' } -> `()' #}

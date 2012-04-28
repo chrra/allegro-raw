@@ -8,7 +8,7 @@ import C2HS
 #include "allegro-raw.h"
 {#context prefix = "ALLEGRO_" #}
 
-data Color = Color { colorR, colorG, colorB, colorA :: Float }
+data Color = Color { colorR, colorG, colorB, colorA :: Float } deriving (Eq, Ord, Show, Read)
 
 {#pointer *COLOR as ColorPtr -> Color #}
 

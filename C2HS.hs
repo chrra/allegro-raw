@@ -42,13 +42,14 @@ module C2HS (
   -- * Re-export the C language component of the FFI
   module Foreign.C,
 
-  module C2HS
+  module C2HS,
+  module System.IO.Unsafe
 ) where
 
 
-import Foreign
+import Foreign hiding (unsafePerformIO)
 import Foreign.C
-
+import System.IO.Unsafe (unsafePerformIO)
 import Control.Monad (liftM)
 
 
