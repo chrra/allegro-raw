@@ -4,6 +4,8 @@ module Graphics.UI.Allegro.Raw.Addon.Ttf where
 import Data.Word
 
 import C2HS
+import Internal
+{#import Graphics.UI.Allegro.Raw.File #}
 {#import Graphics.UI.Allegro.Raw.Addon.Font #}
 
 #include "allegro-raw.h"
