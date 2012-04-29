@@ -4,20 +4,19 @@ import Graphics.UI.Allegro.Raw
 main = do
     initialize
     initPrimitivesAddon
-    display <- createDisplay 640 480
-    dispBit <- getBackbuffer display
-    setTargetBitmap dispBit
+    Just display <- createDisplay 640 480
+    setTargetBackbuffer display
     clearToColor (Color 1 1 1 1)
     drawFilledRectangle 50 50 500 400 (Color 0 0 1 0.5)
     drawFilledRectangle 150 150 400 300 (Color 0 0 1 0.5)
     drawCircle 275 225 175 (Color 1 0 0 1) 5
     drawFilledTriangle  275                (225-200)
-                       (275-cos(pi/4)*200) (225+sin(pi/4)*200)
-                       (275+cos(pi/4)*200) (225+sin(pi/4)*200)
+                       (275-cos(pi/5)*200) (225+sin(pi/5)*200)
+                       (275+cos(pi/5)*200) (225+sin(pi/5)*200)
                        (Color 1 0 1 0.5)
     flipDisplay
     installKeyboard
-    q <- createEventQueue
+    Just q <- createEventQueue
     dispsrc <- getDisplayEventSource display
     keysrc <- getKeyboardEventSource
     registerEventSource q dispsrc

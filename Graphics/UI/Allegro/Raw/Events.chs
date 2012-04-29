@@ -297,28 +297,40 @@ instance Storable Event where
 {#fun unsafe al_set_event_source_data as setEventSourceData { id `EventSource', id `Ptr ()' } -> `()' #}
 {#fun unsafe al_get_event_source_data as getEventSourceData { id `EventSource' } -> `Ptr ()' id #}
 
-data EventQueue'
-{#pointer *EVENT_QUEUE as EventQueue -> EventQueue' #}
+data EventQueue_
+{#pointer *EVENT_QUEUE as EventQueue foreign -> EventQueue_ #}
 
-{#fun unsafe al_create_event_queue as createEventQueue {  } -> `EventQueue' id #}
-{#fun unsafe al_destroy_event_queue as destroyEventQueue { id `EventQueue' } -> `()' #}
-{#fun unsafe al_register_event_source as registerEventSource { id `EventQueue', id `EventSource' } -> `()' #}
-{#fun unsafe al_unregister_event_source as unregisterEventSource { id `EventQueue', id `EventSource' } -> `()' #}
-{#fun unsafe al_is_event_queue_empty as isEventQueueEmpty { id `EventQueue' } -> `Bool' #}
-{#fun unsafe al_get_next_event as getNextEvent' { id `EventQueue', withMalloc- `EventPtr' id } -> `Bool' #}
+foreign import ccall "allegro-raw.h &al_destroy_event_queue"
+    destroyEventQueuePtr :: FinalizerPtr EventQueue_
+
+eventQueuePtrToEventQueue :: Ptr EventQueue_ -> IO (Maybe EventQueue)
+eventQueuePtrToEventQueue p =
+    if p == nullPtr
+        then return Nothing
+        else Just <$> newForeignPtr destroyEventQueuePtr p
+
+{#fun unsafe al_create_event_queue as createEventQueue {  } -> `Maybe EventQueue' eventQueuePtrToEventQueue* #}
+{#fun unsafe al_destroy_event_queue as destroyEventQueue' { id `Ptr EventQueue_' } -> `()' #}
+destroyEventQueue :: EventQueue -> IO ()
+destroyEventQueue = finalizeForeignPtr
+
+{#fun unsafe al_register_event_source as registerEventSource { withForeignPtr* `EventQueue', id `EventSource' } -> `()' #}
+{#fun unsafe al_unregister_event_source as unregisterEventSource { withForeignPtr* `EventQueue', id `EventSource' } -> `()' #}
+{#fun unsafe al_is_event_queue_empty as isEventQueueEmpty { withForeignPtr* `EventQueue' } -> `Bool' #}
+{#fun unsafe al_get_next_event as getNextEvent' { withForeignPtr* `EventQueue', withMalloc- `EventPtr' id } -> `Bool' #}
 getNextEvent :: EventQueue -> IO (Maybe Event)
 getNextEvent = ptrAndBoolToMaybe . getNextEvent'
 
-{#fun unsafe al_peek_next_event as peekNextEvent' { id `EventQueue', withMalloc- `EventPtr' id } -> `Bool' #}
+{#fun unsafe al_peek_next_event as peekNextEvent' { withForeignPtr* `EventQueue', withMalloc- `EventPtr' id } -> `Bool' #}
 peekNextEvent :: EventQueue -> IO (Maybe Event)
 peekNextEvent = ptrAndBoolToMaybe . peekNextEvent'
 
-{#fun unsafe al_drop_next_event as dropNextEvent' { id `EventQueue' } -> `Bool' #}
-{#fun unsafe al_flush_event_queue as flushEventQueue { id `EventQueue' } -> `()' #}
-{#fun unsafe al_wait_for_event as waitForEvent { id `EventQueue', alloca- `Event' peek* } -> `()' #}
-{#fun unsafe al_wait_for_event_timed as waitForEventTimed' { id `EventQueue', alloca- `EventPtr' id, `Float' } -> `Bool' #}
+{#fun unsafe al_drop_next_event as dropNextEvent' { withForeignPtr* `EventQueue' } -> `Bool' #}
+{#fun unsafe al_flush_event_queue as flushEventQueue { withForeignPtr* `EventQueue' } -> `()' #}
+{#fun unsafe al_wait_for_event as waitForEvent { withForeignPtr* `EventQueue', alloca- `Event' peek* } -> `()' #}
+{#fun unsafe al_wait_for_event_timed as waitForEventTimed' { withForeignPtr* `EventQueue', alloca- `EventPtr' id, `Float' } -> `Bool' #}
 waitForEventTimed :: EventQueue -> Float -> IO (Maybe Event)
 waitForEventTimed = (ptrAndBoolToMaybe .) . waitForEventTimed'
-{#fun unsafe al_wait_for_event_until as waitForEventUntil' { id `EventQueue', withMalloc- `EventPtr' id, withForeignPtr* `Timeout' } -> `Bool' #}
+{#fun unsafe al_wait_for_event_until as waitForEventUntil' { withForeignPtr* `EventQueue', withMalloc- `EventPtr' id, withForeignPtr* `Timeout' } -> `Bool' #}
 waitForEventUntil :: EventQueue -> Timeout -> IO (Maybe Event)
 waitForEventUntil = (ptrAndBoolToMaybe .) . waitForEventUntil'
