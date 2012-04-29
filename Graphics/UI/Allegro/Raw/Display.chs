@@ -117,9 +117,9 @@ instance Storable MonitorInfo where
 {#fun unsafe al_get_display_flags as getDisplayFlags { id `Display' } -> `[DisplayFlags]' cToEnumFlags #}
 {#fun unsafe al_toggle_display_flag as toggleDisplayFlag { id `Display', cFromEnum `DisplayFlags', `Bool'} -> `Bool' #}
 
-{#fun unsafe al_create_display as createDisplay { `Int', `Int' } -> `Display' id #}
+{#fun unsafe al_create_display as createDisplay { `Int', `Int' } -> `Maybe Display' ptrToMaybePtr #}
 {#fun unsafe al_destroy_display as destroyDisplay { id `Display' } -> `()' #}
-{#fun unsafe al_get_current_display as getCurrentDisplay {  } -> `Display' id #}
+{#fun unsafe al_get_current_display as getCurrentDisplay {  } -> `Maybe Display' ptrToMaybePtr #}
 {#fun unsafe al_set_target_bitmap as setTargetBitmap { withForeignPtr* `Bitmap' } -> `()' #}
 {#fun unsafe al_set_target_backbuffer as setTargetBackbuffer { id `Display' } -> `()' #}
 {#fun unsafe al_get_backbuffer as getBackbuffer { id `Display' } -> `Maybe Bitmap' bitmapPtrToBitmap'* #}
@@ -132,7 +132,7 @@ instance Storable MonitorInfo where
 {#fun unsafe al_is_compatible_bitmap as isCompatibleBitmap { withForeignPtr* `Bitmap' } -> `Bool' #}
 
 {#fun unsafe al_get_num_display_modes as getNumDisplayModes { } -> `Int' #}
-{#fun unsafe al_get_display_mode as getDisplayMode { `Int', withT* `DisplayMode' } -> `DisplayMode' peek* #}
+{#fun unsafe al_get_display_mode as getDisplayMode { `Int', alloca- `DisplayModePtr' } -> `Maybe DisplayMode' maybePeek'* #}
 {#fun unsafe al_wait_for_vsync as waitForVsync { } -> `()' #}
 {#fun unsafe al_get_display_event_source as getDisplayEventSource { id `Display' } -> `EventSource' id #}
 
@@ -151,8 +151,8 @@ instance Storable MonitorInfo where
 
 {#fun unsafe al_set_window_title as setWindowTitle { id `Display', `String' } -> `()' #}
 
-{#fun unsafe al_set_new_display_option as setNewDisplayOption { cFromEnum `DisplayOptions', `Int', `Int' } -> `()' #}
-{#fun unsafe al_get_new_display_option as getNewDisplayOptions { cFromEnum `DisplayOptions', alloca- `Int' peekIntConv* } -> `Int' #}
+{#fun unsafe al_set_new_display_option as setNewDisplayOption { cFromEnum `DisplayOptions', `Int', cFromEnum `Importance' } -> `()' #}
+{#fun unsafe al_get_new_display_option as getNewDisplayOptions { cFromEnum `DisplayOptions', alloca- `Int' peekEnumConv* } -> `Int' #}
 {#fun unsafe al_reset_new_display_options as resetNewDisplayOptions { } -> `()' #}
 
 {#fun unsafe al_get_display_option as getDisplayOption { id `Display', cFromEnum `DisplayOptions' } -> `Int' #}
