@@ -124,6 +124,9 @@ instance Enum LockingFlags where
 {#enum BLEND_MODE as BlendMode {underscoreToCase} deriving (Show, Eq, Ord, Read) #}
 {#enum BLEND_OPERATIONS as BlendOperations {underscoreToCase} deriving (Show, Eq, Ord, Read) #}
 
+data LockedRegion_
+{#pointer *LOCKED_REGION as LockedRegion -> LockedRegion_ #}
+
 {#fun unsafe al_set_new_bitmap_format as setNewBitmapFormat { cFromEnum `PixelFormat' } -> `()' #}
 {#fun unsafe al_get_new_bitmap_format as getNewBitmapFormat { } -> `PixelFormat' cToEnum #}
 
@@ -151,6 +154,10 @@ destroyBitmap = finalizeForeignPtr
 {#fun unsafe al_draw_tinted_scaled_bitmap_w as drawTintedScaledBitmapRegion { withForeignPtr* `Bitmap', withT* `Color', `Float', `Float', `Float', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
 {#fun unsafe al_draw_tinted_rotated_bitmap_w as drawTintedRotatedBitmap { withForeignPtr* `Bitmap', withT* `Color', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
 {#fun unsafe al_draw_tinted_scaled_rotated_bitmap_w as drawTintedScaledRotatedBitmap { withForeignPtr* `Bitmap', withT* `Color', `Float', `Float', `Float', `Float', `Float', `Float', `Float', cFromEnumFlags `[BlittingFlags]' } -> `()' #}
+
+{#fun unsafe al_lock_bitmap as lockBitmap { withForeignPtr* `Bitmap', cFromEnum `PixelFormat', cFromEnum `LockingFlags' } -> `Maybe LockedRegion' ptrToMaybePtr #}
+{#fun unsafe al_lock_bitmap_region as lockBitmapRegion { withForeignPtr* `Bitmap', `Int', `Int', `Int', `Int', cFromEnum `PixelFormat', cFromEnum `LockingFlags' } -> `Maybe LockedRegion' ptrToMaybePtr #}
+{#fun unsafe al_unlock_bitmap as unlockBitmap { withForeignPtr* `Bitmap' } -> `()' #}
 
 {#fun unsafe al_put_pixel_w as putPixel { `Int', `Int', withT* `Color' } -> `()' #}
 {#fun unsafe al_put_blended_pixel_w as putBlendedPixel { `Int', `Int', withT* `Color' } -> `()' #}

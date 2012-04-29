@@ -22,11 +22,6 @@ cFromEnumFlags = foldl' (.|.) 0 . map cFromEnum
 cToEnumFlags :: (Enum e, Bounded e, Integral i) => i -> [e]
 cToEnumFlags i = filter (\e -> fromEnum e .&. fromIntegral i > 0) [minBound..maxBound]
 
-peek'n'free :: Storable a => Ptr a -> IO a
-peek'n'free p = do x <- peek p
-                   free p
-                   return x
-
 peekEnumConv :: (Storable a, Integral a, Enum e) => Ptr a -> IO e
 peekEnumConv = fmap fmap fmap cToEnum peek
 
@@ -49,3 +44,6 @@ withMallocedForeign f = do x <- mallocForeignPtr
 maybeNewForeignPtr_ :: Storable a => Ptr a -> IO (Maybe (ForeignPtr a))
 maybeNewForeignPtr_ p = if p == nullPtr then return Nothing
                                         else Just <$> newForeignPtr_ p
+
+ptrToMaybePtr :: Ptr a -> Maybe (Ptr a)
+ptrToMaybePtr p = if p == nullPtr then Nothing else Just p
