@@ -38,6 +38,6 @@ data Cond_
 {#fun al_create_cond as createCond { } -> `Cond' id #}
 {#fun al_destroy_cond as destroyCond { id `Cond' } -> `()' #}
 {#fun al_wait_cond as waitCond { id `Cond', id `Mutex' } -> `()' #}
-{#fun al_wait_cond_until as waitCondUntil { id `Cond', id `Mutex', id `Timeout' } -> `Int' #}
+{#fun al_wait_cond_until as waitCondUntil { id `Cond', id `Mutex', withForeignPtr* `Timeout' } -> `Int' #}
 {#fun al_broadcast_cond as broadcastCond { id `Cond' } -> `()' #}
 {#fun al_signal_cond as signalCond { id `Cond' } -> `()' #}

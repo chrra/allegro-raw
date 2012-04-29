@@ -319,6 +319,6 @@ peekNextEvent = ptrAndBoolToMaybe . peekNextEvent'
 {#fun unsafe al_wait_for_event_timed as waitForEventTimed' { id `EventQueue', alloca- `EventPtr' id, `Float' } -> `Bool' #}
 waitForEventTimed :: EventQueue -> Float -> IO (Maybe Event)
 waitForEventTimed = (ptrAndBoolToMaybe .) . waitForEventTimed'
-{#fun unsafe al_wait_for_event_until as waitForEventUntil' { id `EventQueue', withMalloc- `EventPtr' id, id `Timeout' } -> `Bool' #}
+{#fun unsafe al_wait_for_event_until as waitForEventUntil' { id `EventQueue', withMalloc- `EventPtr' id, withForeignPtr* `Timeout' } -> `Bool' #}
 waitForEventUntil :: EventQueue -> Timeout -> IO (Maybe Event)
 waitForEventUntil = (ptrAndBoolToMaybe .) . waitForEventUntil'
